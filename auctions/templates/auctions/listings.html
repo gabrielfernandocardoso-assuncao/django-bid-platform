@@ -16,13 +16,17 @@
                             <!-- Título do Anúncio -->
                             <h3 class="card-title h5 text-primary fw-bold">{{ listing.title }}</h3>
                             
+                            <hr>
+
                             <!-- Descrição com seus filtros originais e flex-grow para empurrar a data para o final -->
                             <div class="card-text text-muted flex-grow-1">
-                                {{ listing.description|truncatechars:100|linebreaks }}
+                                <p>
+                                    <a href="{% url 'listing' listing.id %}"" class="btn btn-secondary w-50">See More</a>
+                                </p>
                             </div>
                             
                             <!-- Data limite alinhada no rodapé do card -->
-                            <div class="border-top pt-2 mt-3">
+                            <div class="border-top pt-2 mt-1">
                                 <p class="card-text mb-0 text-danger small">
                                     <strong>Ends at:</strong> {{ listing.date_endind|date:"d/m/Y \a\t H:i" }}
                                 </p>
