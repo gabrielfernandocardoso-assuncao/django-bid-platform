@@ -1,0 +1,42 @@
+# Ambiente Virtual
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Arquivos compilados do Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.swo
+*.swp
+*.swn
+*.so
+
+# Arquivos de banco de dados
+db.sqlite3
+db.sqlite3-journal
+
+# Arquivos de log
+*.log
+
+# Arquivos de mídia (uploads locais)
+media/
+
+# Configurações do seu ambiente/IDE
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+local_settings.py
+
+# Arquivos gerados pelo OS
+.DS_Store
+Thumbs.db
+._*
+
+# Variáveis de ambiente
+.env
+.env.local
