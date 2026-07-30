@@ -1,5 +1,10 @@
 from django.shortcuts import render
 from .models import Listing
+from django.contrib.auth.decorators import login_required
+from .forms import ListingForm
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+
 # Create your views here.
 
 # Creating Index view
@@ -27,3 +32,20 @@ def listing_view(request, listing_id):
 
     return render(request, 'auctions/listing.html', context)
 
+# Creating new_listing view
+@login_required(login_url='/users/login/')
+def new_listing(request):
+    """Create a new listing"""
+    if request.method != "POST":
+        # recive new data and make a new form null
+        form = ListingForm()
+    else:
+        # recive full form and process
+        form = ListingForm(request.POST)
+        if form.is_valid():
+            new_listing = form.save(commit=False)
+            new_listing.owner = request.user
+            new_listing.save()
+            return HttpResponseRedirect(reverse('index'))
+    context = { 'form' : form }
+    return render(request, 'auctions/new_listing.html', context)

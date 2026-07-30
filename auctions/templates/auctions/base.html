@@ -10,14 +10,16 @@
     <div class="container mt-4">
         {% if user.is_authenticated %}
             <p class="text-danger">Hello {{ user.username }}, you are welcome!</p>
-            <a href="{% url 'logout' %}">Logout</a>
+            <a href="{% url 'logout' %}">Logout</a> -
+            <a href="{% url 'new_listing' %}">Create Auction</a>
         {% else %}
             <a href="{% url 'login' %}">Login</a> - 
             <a href="{% url 'register' %}">Register</a>
         {% endif %}
         <hr>
         <a href="{% url 'listing' %}">See Listings</a> -
-        <a href="{% url 'index' %}">Main Page</a> 
+        <a href="{% url 'index' %}">Main Page</a> -
+        
         
         {% block content %} {% endblock %}
 
