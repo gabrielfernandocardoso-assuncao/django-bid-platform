@@ -11,7 +11,7 @@ class Listing(models.Model):
     # initial_price
     initial_price = models.FloatField()
     # date_ending
-    date_endind = models.DateTimeField(auto_now_add=True)
+    date_endind = models.DateTimeField()
     # owner
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
 

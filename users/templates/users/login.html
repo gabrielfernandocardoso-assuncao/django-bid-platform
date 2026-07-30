@@ -1,0 +1,16 @@
+{% extends 'auctions/base.html' %}
+
+{% block title %} Login {% endblock %}
+
+{% block content %}
+    <div class="col-12 mt-4">
+        <form action="" method="post">
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            <button name="submit">Login</button>
+            <input type="hidden" name="next" value="{% url 'index' %}">
+        </form>
+    </div>
+{% endblock%}
