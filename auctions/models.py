@@ -14,6 +14,7 @@ class Listing(models.Model):
     date_endind = models.DateTimeField()
     # owner
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    
 
     def __str__(self):
             "return representation of name"

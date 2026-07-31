@@ -19,6 +19,11 @@
                         <div class="card-text text-muted flex-grow-1">
                             {{ listing_object.description|linebreaks }}
                         </div>
+                        {% if user.is_authenticated %}
+                            <p>
+                                <a href="{% url 'place_bid' listing_object.id %}" class="btn btn-secondary w-50">Send Bid</a>
+                            </p>
+                        {% endif %}
                         
                         <!-- Data limite alinhada no rodapé do card -->
                         <div class="border-top pt-2 mt-3">

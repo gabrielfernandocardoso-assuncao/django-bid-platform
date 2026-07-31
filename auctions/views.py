@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from .models import Listing
+from .models import Listing, Bid
 from django.contrib.auth.decorators import login_required
-from .forms import ListingForm
+from .forms import ListingForm, BidForm
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
@@ -49,3 +49,38 @@ def new_listing(request):
             return HttpResponseRedirect(reverse('index'))
     context = { 'form' : form }
     return render(request, 'auctions/new_listing.html', context)
+
+# Creating place_bid view
+@login_required(login_url='/users/login/')
+def place_bid(request, listing_id = None):
+    listing = Listing.objects.get(id = listing_id)
+
+    if request.method != 'POST':
+        form = BidForm()
+    else:
+        form = BidForm(data = request.POST)
+        if form.is_valid():
+            new_bid = form.cleaned_data['bid_amount']
+
+            max_bid = Bid.objects.filter(bid_item = listing).order_by('-bid_amount').first()
+
+            if max_bid:
+                min_bid = max_bid.bid_amount
+            else:
+                min_bid = listing.initial_price
+
+        if new_bid <= min_bid:
+            form.add_error('bid_amount', f"The bid must be higher than {min_bid}.")
+        else:
+            bid = form.save(commit=False)
+            bid.bid_item = listing
+            bid.bid_owner = request.user
+
+            bid.save()
+
+            return HttpResponseRedirect(reverse('listing', args=(listing.id,)))
+    context = {
+        'form' : form,
+        'listing' : listing
+    }
+    return render(request, 'auctions/place_bid.html', context)

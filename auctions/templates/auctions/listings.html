@@ -23,6 +23,11 @@
                                 <p>
                                     <a href="{% url 'listing' listing.id %}"" class="btn btn-secondary w-50">See More</a>
                                 </p>
+                                {% if user.is_authenticated %}
+                                <p>
+                                    <a href="{% url 'place_bid' listing.id %}" class="btn btn-secondary w-50">Send Bid</a>
+                                </p>
+                                {% endif %}
                             </div>
                             
                             <!-- Data limite alinhada no rodapé do card -->
