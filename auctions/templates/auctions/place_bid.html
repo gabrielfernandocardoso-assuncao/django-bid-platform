@@ -1,16 +1,73 @@
 {% extends 'auctions/base.html' %}
+{% load crispy_forms_tags %}
 
-{% block title %} Place Bid {% endblock %}
+{% block title %} Enviar Lance {% endblock %}
 
 {% block content %}
-    <div class="col-12">
-        <h1>Place Bid Pages</h1>
-        <form action="" method="post">
-            {% csrf_token %}
+<div class="row justify-content-center mt-4">
+    <div class="col-md-8 col-lg-5">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-primary text-white text-center p-4">
+                <h3 class="mb-0">Página de Lances</h3>
+                <p class="mb-0 mt-2">{{ listing.title }}</p>
+            </div>
+            <div class="card-body p-5">
+                
+                <form action="" method="post" id="form-lance">
+                    {% csrf_token %}
 
-            {{ form.as_p }}
+                    {{ form|crispy }}
 
-            <button name="submit" class="btn btn-success">Send</button>
-        </form>
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="button" class="btn btn-success btn-lg" onclick="prepararLance()">Enviar Lance</button>
+                        <a href="{% url 'listing' listing.id %}" class="btn btn-outline-secondary">Cancelar</a>
+                    </div>
+                </form>
+                
+            </div>
+        </div>
     </div>
+</div>
+
+<!-- Modal Interativo Controlado pelo JS -->
+<div class="modal fade" id="modalConfirmacaoLance" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-primary">Confirmação de Lance</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center fs-5">
+                Confirmar envio de lance no valor de <br><strong id="exibicao-valor" class="text-success fs-2"></strong>?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Revisar</button>
+                <button type="button" class="btn btn-primary" onclick="submeterFormulario()">Sim, Confirmar</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const modalLance = new bootstrap.Modal(document.getElementById('modalConfirmacaoLance'));
+
+    function prepararLance() {
+        // Pega o valor do input gerado automaticamente pelo ModelForm do Django
+        const inputValor = document.getElementById('id_bid_amount').value;
+        
+        if (inputValor && parseFloat(inputValor) > 0) {
+            document.getElementById('exibicao-valor').innerText = 'R$ ' + parseFloat(inputValor).toFixed(2);
+            modalLance.show();
+        } else {
+            alert("Por favor, insira um valor válido para prosseguir.");
+        }
+    }
+
+    function submeterFormulario() {
+        // Processa o post back para a view 'place_bid'
+        document.getElementById('form-lance').submit();
+    }
+</script>
 {% endblock %}

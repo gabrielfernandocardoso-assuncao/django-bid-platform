@@ -1,46 +1,62 @@
 {% extends 'auctions/base.html' %}
 
-{% block title %} listing_object Object {% endblock %}
+{% block title %} {{ listing_object.title }} {% endblock %}
 
 {% block content %}
-    <div class="col-12 mt-4">
-        <p class="fs-4 fw-bold">Page of listing_objects!</p>
-        
-        
-        <!-- O 'row' inicia a linha do Grid do Bootstrap -->
-        <div class="row g-4">
-            <!-- Define o tamanho do grid: 1 por linha no celular (col-12), 3 por linha no computador (col-lg-4) -->
-            <div class="col-12 col-md-6 col-lg-4">
-                <div class="card h-100 shadow-sm">
-                    <div class="card-body d-flex flex-column">
-                        <!-- Título do Anúncio -->
-                        <h3 class="card-title h5 text-primary fw-bold">{{ listing_object.title }}</h3>
+<div class="row justify-content-center mt-4">
+    <div class="col-lg-8">
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-5">
+                <h2 class="text-primary fw-bold mb-4">{{ listing_object.title }}</h2>
+                
+                <div class="bg-white border rounded p-4 mb-4 text-muted fs-5">
+                    {{ listing_object.description|linebreaks }}
+                </div>
+
+                {% if user.is_authenticated %}
+                    <div class="d-flex gap-3 mb-4">
+                        <a href="{% url 'place_bid' listing_object.id %}" class="btn btn-primary btn-lg px-5">Enviar Lance</a>
                         
-                        <!-- Descrição com seus filtros originais e flex-grow para empurrar a data para o final -->
-                        <div class="card-text text-muted flex-grow-1">
-                            {{ listing_object.description|linebreaks }}
-                        </div>
-                        {% if user.is_authenticated %}
-                            <p>
-                                <a href="{% url 'place_bid' listing_object.id %}" class="btn btn-secondary w-50">Send Bid</a>
-                            </p>
-                            {% if user == listing_object.owner and listing_object.active %}
-                                <form action="{% url 'close_auction' listing_object.id %}" method="post">
-                                    {% csrf_token %}
-                                    <button type="submit" name="next" class="btn btn-danger">Close Auction</button>
-                                </form>
-                            {% endif %}
+                        {% if user == listing_object.owner and listing_object.active %}
+                            <!-- Botão que aciona o Modal -->
+                            <button type="button" class="btn btn-danger btn-lg" data-bs-toggle="modal" data-bs-target="#closeAuctionModal">
+                                Encerrar Leilão
+                            </button>
                         {% endif %}
-                        
-                        <!-- Data limite alinhada no rodapé do card -->
-                        <div class="border-top pt-2 mt-3">
-                            <p class="card-text mb-0 text-danger small">
-                                <strong>Ends at:</strong> {{ listing_object.date_endind|date:"d/m/Y \a\t H:i" }}
-                            </p>
-                        </div>
                     </div>
+                {% endif %}
+
+                <div class="border-top pt-3">
+                    <p class="text-danger mb-0 fs-5">
+                        <strong>Data Limite:</strong> {{ listing_object.date_endind|date:"d/m/Y \à\s H:i" }}
+                    </p>
                 </div>
             </div>
         </div>
     </div>
+</div>
+
+<!-- Modal de Confirmação JavaScript / Bootstrap -->
+{% if user == listing_object.owner and listing_object.active %}
+<div class="modal fade" id="closeAuctionModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">Confirmar Encerramento</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                Você tem certeza que deseja encerrar o leilão de <strong>{{ listing_object.title }}</strong>?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <form action="{% url 'close_auction' listing_object.id %}" method="post" class="m-0">
+                    {% csrf_token %}
+                    <button type="submit" name="next" class="btn btn-danger">Sim, Encerrar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
 {% endblock %}

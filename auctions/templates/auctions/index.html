@@ -1,9 +1,18 @@
 {% extends 'auctions/base.html' %}
 
-{% block title %}Main{% endblock %}
+{% block title %}Início{% endblock %}
 
 {% block content %}
-    <div class="col-12 mt-1">
-        <p>Main page of Auctions!</p>
+<div class="px-4 py-5 my-5 text-center bg-white shadow-sm rounded-3">
+    <h1 class="display-5 fw-bold text-primary">Bem-vindo à BidPlatform</h1>
+    <div class="col-lg-6 mx-auto">
+        <p class="lead mb-4">A plataforma para você criar e participar de leilões. Explore as ofertas, faça seus lances e garanta bons negócios.</p>
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+            <a href="{% url 'listing' %}" class="btn btn-primary btn-lg px-4 gap-3">Ver Anúncios</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'new_listing' %}" class="btn btn-outline-secondary btn-lg px-4">Criar Leilão</a>
+            {% endif %}
+        </div>
     </div>
+</div>
 {% endblock %}

@@ -1,13 +1,26 @@
 {% extends 'auctions/base.html' %}
+{% load crispy_forms_tags %}
 
-{% block title %} New Listing {% endblock %}
+{% block title %} Criar Novo Leilão {% endblock %}
 
 {% block content %}
-    <div class="col-12 mt-3">
-        <form action="" method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button name="submit" class="btn btn-success">Add</button>
-        </form>
+<div class="row justify-content-center mt-4">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-4 p-md-5">
+                <h3 class="text-primary fw-bold text-center mb-4">Adicionar Novo Leilão</h3>
+                
+                <form action="" method="post">
+                    {% csrf_token %}
+                    
+                    {{ form|crispy }}
+                    
+                    <div class="d-grid mt-4">
+                        <button type="submit" name="submit" class="btn btn-success btn-lg">Criar Anúncio</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
+</div>
 {% endblock %}
