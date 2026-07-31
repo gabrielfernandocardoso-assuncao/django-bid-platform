@@ -18,6 +18,7 @@
                             
                             <hr>
 
+                            {% if item.active %}
                             <!-- Descrição com seus filtros originais e flex-grow para empurrar a data para o final -->
                             <div class="card-text text-muted flex-grow-1">
                                 <p>
@@ -36,6 +37,10 @@
                                     <strong>Ends at:</strong> {{ listing.date_endind|date:"d/m/Y \a\t H:i" }}
                                 </p>
                             </div>
+                            {% else %}
+                                <h3 class="text-danger">Acount Closed!!!</h3>
+                                <p>Winner Price: <strong>{{ listing.current_price }}</strong></p>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

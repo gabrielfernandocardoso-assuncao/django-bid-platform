@@ -14,11 +14,21 @@ class Listing(models.Model):
     date_endind = models.DateTimeField()
     # owner
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
-    
+    # active
+    active = models.BooleanField(default=True)
 
     def __str__(self):
             "return representation of name"
             return self.title
+
+    # define winner
+    @property
+    def current_price(self):
+        "Search for a highest bid in a specific auction"
+        highest_bid = self.bid_set.order_by('-bid_amount').first()
+        if highest_bid:
+            return highest_bid.bid_amount
+        return self.initial_price
     
 # Creating Bid model:
 class Bid(models.Model):

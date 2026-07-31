@@ -2,7 +2,7 @@ from django.shortcuts import render
 from .models import Listing, Bid
 from django.contrib.auth.decorators import login_required
 from .forms import ListingForm, BidForm
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.urls import reverse
 
 # Create your views here.
@@ -19,6 +19,8 @@ def index(request):
 def listing(request):
     # Importing Listing
     listings = Listing.objects.all()
+
+    
 
     context = { 'listing_list' : listings }
 
@@ -84,3 +86,18 @@ def place_bid(request, listing_id = None):
         'listing' : listing
     }
     return render(request, 'auctions/place_bid.html', context)
+
+# Creating close_auction view
+@login_required(login_url='/users/login/')
+def close_auction(request, listing_id):
+    listing = Listing.objects.get(id = listing_id)
+
+    if listing.owner != request.user:
+        raise Http404("You no have permission to clase this acount!")
+    else:
+        listing.active = False
+
+        listing.save()
+        return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
+
+    

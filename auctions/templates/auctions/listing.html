@@ -6,6 +6,7 @@
     <div class="col-12 mt-4">
         <p class="fs-4 fw-bold">Page of listing_objects!</p>
         
+        
         <!-- O 'row' inicia a linha do Grid do Bootstrap -->
         <div class="row g-4">
             <!-- Define o tamanho do grid: 1 por linha no celular (col-12), 3 por linha no computador (col-lg-4) -->
@@ -23,6 +24,12 @@
                             <p>
                                 <a href="{% url 'place_bid' listing_object.id %}" class="btn btn-secondary w-50">Send Bid</a>
                             </p>
+                            {% if user == listing_object.owner and listing_object.active %}
+                                <form action="{% url 'close_auction' listing_object.id %}" method="post">
+                                    {% csrf_token %}
+                                    <button type="submit" name="next" class="btn btn-danger">Close Auction</button>
+                                </form>
+                            {% endif %}
                         {% endif %}
                         
                         <!-- Data limite alinhada no rodapé do card -->
